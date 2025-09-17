@@ -60,7 +60,7 @@ app.post("/medicines", async (req, res) => {
   }
 });
 
-// ⚡ Stripe PaymentIntent
+//  Stripe PaymentIntent
 app.post("/create-payment-intent", async (req, res) => {
   const { amount } = req.body; // amount in cents
   try {
