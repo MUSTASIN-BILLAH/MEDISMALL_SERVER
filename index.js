@@ -134,7 +134,29 @@ app.get("/users/search", async (req, res) => {
   }
 });
 
+// 👑 Make user admin
+app.patch("/users/make-admin", async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).send({ error: "Email is required" });
+    }
 
+    const result = await userCollection.updateOne(
+      { email },
+      { $set: { role: "admin" } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    res.send({ message: "User promoted to admin successfully" });
+  } catch (err) {
+    console.error("❌ /users/make-admin error:", err);
+    res.status(500).send({ error: err.message });
+  }
+});
 
 // Stripe payment intent route
 app.post("/create-payment-intent", async (req, res) => {
