@@ -114,6 +114,26 @@ app.get("/users", async (req, res) => {
   }
 });
 
+// 🔍 Search user by email
+app.get("/users/search", async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).send({ error: "Email query is required" });
+    }
+
+    const user = await userCollection.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    res.send(user);
+  } catch (err) {
+    console.error("❌ /users/search error:", err);
+    res.status(500).send({ error: err.message });
+  }
+});
+
 
 
 // Stripe payment intent route
